@@ -30,13 +30,13 @@ ui <- fluidPage(
   theme = bslib::bs_theme(bootswatch = "yeti"),
 
   shiny::fluidRow(
-    h1("Montgomery County Troubled Properties Map"),
+    h1("Montgomery County Property Inspections Map"),
 
     br(),
 
     br(),
 
-    tags$p(strong("Background:"), "This app allows you to view an interactive leaflet map of properties inspected by Montgomery County. The data the map is built on can be found ", tags$a("here.", href = "https://data.montgomerycountymd.gov/Consumer-Housing/Troubled-Properties-Analysis/bw2r-araf"), "Place boundaries come from ", tags$a(href = "https://www.nhgis.org/data", "NHGIS."), "The map has layers for properties with different compliance-ratings, and with property-points scaled to the number of units in the property. Layers for properties with different ratings are colored by the 'severity' index assigned by the county, from 1 (less severe) to 5 (more severe). Click on a layer to turn it on or off. You can click on a property to see more information about the property. You can limit the map to properties in specific cities by using the City-select box, and limit the map to specific properties by using the property-select box. You can add boundaries of places in Montgomery County by using the place box. The app was created by the City of Takoma Park; for questions or concerns, contact Public Administration Specialist Dan Powers at ", tags$a(href = "mailto:danielp@takomaparkmd.gov", "danielp@takomaparkmd.gov.")),
+    tags$p(strong("Background:"), "This app allows you to view an interactive leaflet map of properties inspected by Montgomery County. The data the map is built on can be found ", tags$a("here.", href = "https://data.montgomerycountymd.gov/Consumer-Housing/Troubled-Properties-Analysis/bw2r-araf"), "Place boundaries come from ", tags$a(href = "https://www.nhgis.org/data", "NHGIS."), "The map has layers for properties with different compliance-ratings, and with property-points scaled to the number of units in the property. Layers for properties with different ratings are colored by the 'severity' index assigned by the county, from 1 (less severe) to 5 (more severe). Click on a layer to turn it on or off. You can click on a property to see more information about the property. You can limit the map to properties in specific cities by using the City-select box, and limit the map to specific properties by using the property-select box. You can add boundaries of places in Montgomery County by using the place box. The app was created by the City of Takoma Park; for questions or concerns, contact Senior Policy and Data Analyst Dan Powers at ", tags$a(href = "mailto:danielp@takomaparkmd.gov", "danielp@takomaparkmd.gov.")),
 
     shiny::column(width = 3, offset = 0.5,
                   shiny::selectInput(inputId = "propselect", "Search by properties", choices = tp_props, multiple = T)),
