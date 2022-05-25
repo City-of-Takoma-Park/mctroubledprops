@@ -45,7 +45,17 @@ ui <- fluidPage(
 
   br(),
 
-  leaflet::leafletOutput("tpmap", height = 500)
+  leaflet::leafletOutput("tpmap", height = 500),
+
+  br(),
+
+  shiny::textOutput("dtdesc"),
+
+  br(),
+
+  DT::DTOutput("datatable"),
+
+  shiny::downloadButton("downloaddt", label = "Download data table")
 
 )
 
@@ -72,7 +82,7 @@ server <- function(input, output) {
   output$map <- renderText({
 
     if (nrow(cityfilt()) > 0){
-      output <- "Map of Montgomery County Troubled Properties Data"
+      output <- "Map of Montgomery County Property Inspections Data"
 
     }
 
@@ -187,13 +197,47 @@ server <- function(input, output) {
     output <- map_df()
 
     if (input$placebounds == "Yes"){
+
+      bounds_filt <- cityfilt() %>%
+        st_bbox() %>%
+        as.character()
+
       output <- output %>%
-        addPolygons(stroke = T, color = "blue", weight = 0.5, opacity = 0.5, fill = F, label = label_output(places_mc, "{name}"), labelOptions = labelOptions(noHide = T, direction = "center", textOnly = T, style = list(`font-weight` = "bold", padding = "1px 1px", textsize = "9px")), data = places_mc)
+        addPolygons(stroke = T, color = "blue", weight = 0.5, opacity = 0.5, fill = F, label = label_output(places_mc, "{name}"), labelOptions = labelOptions(noHide = T, direction = "center", textOnly = T, style = list(`font-weight` = "bold", padding = "1px 1px", textsize = "9px")), data = places_mc) %>%
+        fitBounds(bounds_filt[1], bounds_filt[2], bounds_filt[3], bounds_filt[4])
     }
 
     output
 
   })
+
+  output$dtdesc <- shiny::renderText({
+
+    "View inspections data below with any filters applied. Click the download button below the table to download the data."
+
+  })
+
+  output$datatable <- DT::renderDataTable({
+
+    df <- cityfilt() %>%
+      st_drop_geometry() %>%
+      select(-c(latitude, geolocation_address, geolocation_zip, geolocation_state, longitude, geolocation_city, nextinspectiondate)) %>%
+      mutate(sizedist = round(sizedist, 2))
+
+    DT::datatable(df, filter = "top",
+ list(autoWidth = TRUE, pageLength = 5, scrollX = T))
+  })
+
+  output$downloaddt <- downloadHandler(
+    filename = function() paste0("mcinspections", ".xlsx"),
+
+    content = function(file) openxlsx::write.xlsx(cityfilt() %>%
+                                                    st_drop_geometry(),
+                                                  file,
+                                                  asTable = T)
+  )
+
+  # output$datatable <- kableExtra::
 
 }
 
