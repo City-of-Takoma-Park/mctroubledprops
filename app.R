@@ -1,12 +1,3 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(mctroubledproperties)
 library(leaflet)
@@ -15,6 +6,8 @@ library(sf)
 library(tidyverse)
 library(bslib)
 
+# uncomment and run to re-deply app
+# rsconnect::deployApp(appName = "mcpropsearch", account = "takomapark", appFiles = c("app.R", "data"))
 mc_bound <- read_rds("./data/mc_bound.rds")
 places_mc <- st_read("./data/places_mc.geojson")
 mc_troubledprops <- read_rds("./data/mc_prop_data.rds")
